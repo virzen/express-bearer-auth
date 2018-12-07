@@ -10,7 +10,7 @@ const SessionManager = (function () {
     const newSession = v4()
 
     sessions.add(newSession)
-    setTimeout(() => sessions.remove(newSession), SESSION_EXPIRES_IN)
+    setTimeout(() => removeSession(newSession), SESSION_EXPIRES_IN)
 
     return newSession
   }
