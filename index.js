@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const SessionManager = require('./session_manager')
-const protectedRouteMiddleware = require('./protected_route_middleware')
+const { protectedRoute, logoutRoute } = require('./protected_route_middleware')
 
 const PORT = 3000
 
@@ -18,7 +18,11 @@ app.get('/login', (req, res) => {
   res.send(newSession)
 })
 
-app.get('/protected', protectedRouteMiddleware, (_req, res) => {
+app.get('/logout', protectedRoute, logoutRoute, (_req, res) => { 
+  res.send('OK')
+})
+
+app.get('/protected', protectedRoute, (_req, res) => {
   res.send('Protected page content')
 }) 
 

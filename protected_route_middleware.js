@@ -1,7 +1,7 @@
 const SessionManager = require('./session_manager')
 const { getSessionIdFromAuthHeader } = require('./utils')
 
-const middleware = (req, res, next) => {
+const protectedRoute = (req, res, next) => {
   const sessionId = getSessionIdFromAuthHeader(req.headers.authentication)
 
   if (!SessionManager.isValidSession(sessionId)) {
@@ -12,4 +12,12 @@ const middleware = (req, res, next) => {
   next()
 }
 
-module.exports = middleware
+const logoutRoute = (req) => {
+  const sessionId = getSessionIdFromAuthHeader(req.headers.authentication)
+  SessionManager.removeSession(sessionId)
+}
+
+module.exports = {
+  protectedRoute,
+  logoutRoute
+}

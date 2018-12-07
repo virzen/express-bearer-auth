@@ -15,10 +15,15 @@ const SessionManager = (function () {
     return newSession
   }
 
+  const removeSession = session => {
+    sessions.delete(session)
+  }
+
   const isValidSession = session => sessions.has(session)
 
   return {
     createSession,
+    removeSession,
     isValidSession
   }
 }())
