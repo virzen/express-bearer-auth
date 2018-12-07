@@ -1,5 +1,6 @@
 const v4 = require('uuid/v4')
 const { minToMs } = require('./utils')
+const { getSessionIdFromAuthHeader } = require('./utils')
 
 const SESSION_EXPIRES_IN = minToMs(1)
 
@@ -14,11 +15,21 @@ const SessionManager = (function () {
 
     return newSession
   }
+
   const isValidSession = session => sessions.has(session)
+
+  const validateSession = (req, res) => {
+    const sessionId = getSessionIdFromAuthHeader(req.headers.authentication)
+
+    if (!isValidSession(sessionId)) {
+      res.status(401)
+      res.send('Unauthorized')
+    }
+  }
 
   return {
     createSession,
-    isValidSession
+    validateSession,
   }
 }())
 

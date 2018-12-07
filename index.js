@@ -1,7 +1,6 @@
 const express = require('express')
 const app = express()
 const SessionManager = require('./session_manager')
-const { getSessionIdFromAuthHeader } = require('./utils')
 
 const PORT = 3000
 
@@ -19,14 +18,9 @@ app.get('/login', (req, res) => {
 })
 
 app.get('/protected', (req, res) => {
-  const sessionId = getSessionIdFromAuthHeader(req.headers.authentication)
-  if (SessionManager.isValidSession(sessionId)) {
-    res.send('Protected page content')
-    return 
-  }
+  SessionManager.validateSession(req, res)
 
-  res.status(401)
-  res.send('Unauthorized')
+  res.send('Protected page content')
 }) 
 
 app.listen(PORT, () => console.log(`Example app listening on http://localhost:${PORT}!`))
